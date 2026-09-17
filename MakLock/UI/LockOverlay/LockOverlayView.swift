@@ -80,9 +80,18 @@ struct LockOverlayView: View {
                             }
                         }
 
-                        SecondaryButton("Cancel") {
-                            onCancel()
+                        // Same size as the primary button, neutral grey
+                        Button(action: onCancel) {
+                            Text("Cancel")
+                                .font(MakLockTypography.button)
+                                .foregroundColor(MakLockColors.textPrimary)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 10)
+                                .background(MakLockColors.separator)
+                                .cornerRadius(8)
                         }
+                        .buttonStyle(.plain)
+                        .padding(.top, 4)
                     }
 
                     // Dev mode skip button
