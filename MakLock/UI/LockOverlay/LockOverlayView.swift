@@ -136,7 +136,7 @@ struct LockOverlayView: View {
         OverlayWindowService.shared.setTouchIDMode(true)
 
         AuthenticationService.shared.authenticateWithTouchID(
-            reason: "Unlock \(appName)"
+            reason: String(localized: "Unlock \(appName)")
         ) { result in
             // Restore overlay level and mouse capture
             OverlayWindowService.shared.setTouchIDMode(false)

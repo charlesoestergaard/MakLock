@@ -110,7 +110,7 @@ struct AppsSettingsView: View {
                             .foregroundColor(app.autoClose ? MakLockColors.gold : MakLockColors.textSecondary)
                     }
                     .buttonStyle(.plain)
-                    .help(app.autoClose ? "Auto-close enabled" : "Enable auto-close when inactive")
+                    .help(LocalizedStringKey(app.autoClose ? "Auto-close enabled" : "Enable auto-close when inactive"))
 
                     Toggle("", isOn: Binding(
                         get: { app.isEnabled },

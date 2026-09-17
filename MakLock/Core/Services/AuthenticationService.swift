@@ -15,7 +15,7 @@ final class AuthenticationService {
 
     /// Attempt Touch ID authentication.
     /// Concurrent calls are silently ignored — only one evaluatePolicy at a time.
-    func authenticateWithTouchID(reason: String = "Unlock this app", completion: @escaping (AuthResult) -> Void) {
+    func authenticateWithTouchID(reason: String = String(localized: "Unlock this app"), completion: @escaping (AuthResult) -> Void) {
         guard !isAuthenticating else {
             NSLog("[MakLock] Touch ID already in progress — ignoring duplicate call")
             return
@@ -114,7 +114,7 @@ final class AuthenticationService {
     // MARK: - Private
 
     private func mapLAError(_ error: NSError?) -> AuthError {
-        guard let error else { return .systemError("Unknown error") }
+        guard let error else { return .systemError(String(localized: "Unknown error")) }
 
         switch LAError.Code(rawValue: error.code) {
         case .biometryNotAvailable:

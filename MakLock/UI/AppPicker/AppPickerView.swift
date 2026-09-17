@@ -152,8 +152,8 @@ struct AppPickerView: View {
         browseNotice = nil
 
         let panel = NSOpenPanel()
-        panel.title = "Choose Applications"
-        panel.prompt = "Choose"
+        panel.title = String(localized: "Choose Applications")
+        panel.prompt = String(localized: "Choose")
         panel.allowedContentTypes = [.applicationBundle]
         panel.allowsMultipleSelection = true
         panel.canChooseFiles = true
@@ -184,15 +184,15 @@ struct AppPickerView: View {
         for url in urls {
             let fallbackName = url.deletingPathExtension().lastPathComponent
             guard let app = Self.appInfo(atPath: url.path) else {
-                rejected.append("\(fallbackName) can't be protected because it has no bundle identifier.")
+                rejected.append(String(localized: "\(fallbackName) can't be protected because it has no bundle identifier."))
                 continue
             }
             if SafetyManager.isBlacklisted(app.bundleIdentifier) {
-                rejected.append("\(app.name) can't be locked for safety reasons.")
+                rejected.append(String(localized: "\(app.name) can't be locked for safety reasons."))
                 continue
             }
             if alreadyProtected.contains(app.bundleIdentifier) {
-                rejected.append("\(app.name) is already protected.")
+                rejected.append(String(localized: "\(app.name) is already protected."))
                 continue
             }
             if !apps.contains(where: { $0.bundleIdentifier == app.bundleIdentifier }) {
