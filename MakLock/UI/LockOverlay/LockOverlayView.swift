@@ -7,6 +7,8 @@ struct LockOverlayView: View {
     let bundleIdentifier: String
     let isPrimary: Bool
     let onDismiss: () -> Void
+    /// Called when the user gives up — the app must stay locked.
+    let onCancel: () -> Void
 
     @State private var isVisible = false
     @State private var showPasswordInput = false
@@ -77,6 +79,10 @@ struct LockOverlayView: View {
                                 showPasswordInput = true
                             }
                         }
+
+                        SecondaryButton("Cancel") {
+                            onCancel()
+                        }
                     }
 
                     // Dev mode skip button
@@ -130,6 +136,7 @@ struct LockOverlayView: View {
             case .success:
                 onDismiss()
             case .failure(let error):
+                AccessLog.record("Touch ID failed for \(appName): \(error.localizedDescription)")
                 authState = .waitingForUser
                 errorMessage = error.localizedDescription
             case .cancelled:
