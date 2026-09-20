@@ -44,6 +44,20 @@ struct AppsSettingsView: View {
         minutes < 60 ? String(localized: "\(minutes) min") : String(localized: "\(minutes / 60) h")
     }
 
+    private func stayUnlockedTip(for app: ProtectedApp) -> String {
+        if let minutes = app.stayUnlockedMinutes, minutes > 0 {
+            return String(localized: "Stay unlocked: after unlocking, \(app.name) won't ask for Touch ID again for \(Self.stayUnlockedShortTitle(minutes)), even after quitting, idle or sleep. Click to change.")
+        }
+        return String(localized: "Stay unlocked: \(app.name) asks for Touch ID every time it is opened. Click to let it stay unlocked for a while.")
+    }
+
+    private func autoCloseTip(for app: ProtectedApp) -> String {
+        let minutes = Defaults.shared.appSettings.inactiveCloseMinutes
+        return app.autoClose
+            ? String(localized: "Auto-close is on: \(app.name) quits after \(minutes) min without use, so it can't show notifications while locked. Click to turn off.")
+            : String(localized: "Auto-close is off. Click to quit \(app.name) automatically after \(minutes) min without use (set in General).")
+    }
+
     private var emptyState: some View {
         VStack(spacing: 12) {
             Spacer()
@@ -101,7 +115,7 @@ struct AppsSettingsView: View {
                     .menuStyle(.borderlessButton)
                     .menuIndicator(.hidden)
                     .fixedSize()
-                    .help("How long the app stays unlocked before asking again")
+                    .hoverTip(stayUnlockedTip(for: app))
 
                     // Auto-close toggle
                     Button(action: { manager.toggleAutoClose(app) }) {
@@ -110,7 +124,7 @@ struct AppsSettingsView: View {
                             .foregroundColor(app.autoClose ? MakLockColors.gold : MakLockColors.textSecondary)
                     }
                     .buttonStyle(.plain)
-                    .help(app.autoClose ? "Auto-close enabled" : "Enable auto-close when inactive")
+                    .hoverTip(autoCloseTip(for: app))
 
                     Toggle("", isOn: Binding(
                         get: { app.isEnabled },
@@ -118,6 +132,9 @@ struct AppsSettingsView: View {
                     ))
                     .toggleStyle(.goldSwitch)
                     .labelsHidden()
+                    .hoverTip(app.isEnabled
+                        ? String(localized: "Protection is on. Switch off to open this app without unlocking.")
+                        : String(localized: "Protection is off. Switch on to require Touch ID for this app."))
 
                     Button(action: { manager.removeApp(app) }) {
                         Image(systemName: "trash")
@@ -125,6 +142,7 @@ struct AppsSettingsView: View {
                             .foregroundColor(MakLockColors.error)
                     }
                     .buttonStyle(.plain)
+                    .hoverTip(String(localized: "Remove from the protected list"))
                 }
                 .id(app.id)
                 .padding(.vertical, 4)
@@ -134,5 +152,42 @@ struct AppsSettingsView: View {
                 appsToRemove.forEach { manager.removeApp($0) }
             }
         }
+    }
+}
+
+// MARK: - Hover Tooltip
+
+/// Shows a text bubble while the mouse is over the view. Uses a popover, so it is
+/// never clipped by list rows and works on menus and toggles where `.help` does not.
+private struct HoverTip: ViewModifier {
+    let text: String
+    @State private var isHovering = false
+    @State private var isShown = false
+
+    func body(content: Content) -> some View {
+        content
+            .onHover { hovering in
+                isHovering = hovering
+                if hovering {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        if isHovering { isShown = true }
+                    }
+                } else {
+                    isShown = false
+                }
+            }
+            .popover(isPresented: $isShown, arrowEdge: .bottom) {
+                Text(text)
+                    .font(MakLockTypography.caption)
+                    .frame(maxWidth: 260)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(10)
+            }
+    }
+}
+
+private extension View {
+    func hoverTip(_ text: String) -> some View {
+        modifier(HoverTip(text: text))
     }
 }
