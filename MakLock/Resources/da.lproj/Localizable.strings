@@ -34,7 +34,13 @@
 "Add apps to protect them with Touch ID or password." = "Tilføj apps for at beskytte dem med Touch ID eller adgangskode.";
 "Auto-close enabled" = "Automatisk lukning slået til";
 "Enable auto-close when inactive" = "Luk automatisk ved inaktivitet";
-"How long the app stays unlocked before asking again" = "Hvor længe appen forbliver låst op, før der spørges igen";
+"Stay unlocked: after unlocking, %@ won't ask for Touch ID again for %@, even after quitting, idle or sleep. Click to change." = "Forbliv låst op: Når %@ er låst op, spørger den ikke om Touch ID igen i %@ – heller ikke efter afslutning, inaktivitet eller vågeblus. Klik for at ændre.";
+"Stay unlocked: %@ asks for Touch ID every time it is opened. Click to let it stay unlocked for a while." = "Forbliv låst op: %@ beder om Touch ID, hver gang den åbnes. Klik for at lade den forblive låst op i et stykke tid.";
+"Auto-close is on: %@ quits after %lld min without use, so it can't show notifications while locked. Click to turn off." = "Automatisk lukning er slået til: %@ lukkes efter %lld min uden brug, så den ikke kan vise notifikationer, mens den er låst. Klik for at slå fra.";
+"Auto-close is off. Click to quit %@ automatically after %lld min without use (set in General)." = "Automatisk lukning er slået fra. Klik for at lukke %@ automatisk efter %lld min uden brug (indstilles under Generelt).";
+"Protection is on. Switch off to open this app without unlocking." = "Beskyttelse er slået til. Slå fra for at åbne appen uden at låse op.";
+"Protection is off. Switch on to require Touch ID for this app." = "Beskyttelse er slået fra. Slå til for at kræve Touch ID for denne app.";
+"Remove from the protected list" = "Fjern fra listen over beskyttede apps";
 "Ask every time" = "Spørg hver gang";
 "Stay unlocked for %lld minutes" = "Forbliv låst op i %lld minutter";
 "Stay unlocked for 1 hour" = "Forbliv låst op i 1 time";
