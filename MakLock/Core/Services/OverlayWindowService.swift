@@ -130,11 +130,17 @@ final class OverlayWindowService {
         currentApp?.name
     }
 
-    /// During Touch ID: pass through mouse events so system dialog gets interaction.
-    /// After auth: restore mouse capture for overlay blocking.
+    /// During Touch ID: drop the overlay just below the system Touch ID dialog
+    /// (which is shown at the screen-saver level) so the dialog is always visible
+    /// and clickable. The overlay keeps receiving clicks, so its Cancel button works.
+    /// After auth: restore the normal overlay level.
     func setTouchIDMode(_ active: Bool) {
+        let level: NSWindow.Level = active
+            ? NSWindow.Level(rawValue: NSWindow.Level.screenSaver.rawValue - 1)
+            : .screenSaver
         for window in overlayWindows {
-            window.ignoresMouseEvents = active
+            window.level = level
+            window.ignoresMouseEvents = false
         }
     }
 
