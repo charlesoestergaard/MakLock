@@ -112,6 +112,7 @@
 /* Lock overlay */
 "%@ is Locked" = "%@ er låst";
 "Authenticating..." = "Godkender…";
+"Touch ID did not respond." = "Touch ID svarede ikke.";
 "Try Again" = "Prøv igen";
 "Use Password Instead" = "Brug adgangskode i stedet";
 "Enter Password" = "Skriv adgangskode";
