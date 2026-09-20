@@ -132,7 +132,7 @@ final class AuthenticationService {
     // MARK: - Private
 
     private func mapLAError(_ error: NSError?) -> AuthError {
-        guard let error else { return .systemError("Unknown error") }
+        guard let error else { return .systemError(String(localized: "Unknown error")) }
 
         switch LAError.Code(rawValue: error.code) {
         case .biometryNotAvailable:

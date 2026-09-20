@@ -150,7 +150,7 @@ struct LockOverlayView: View {
         OverlayWindowService.shared.setTouchIDMode(true)
 
         AuthenticationService.shared.authenticateWithTouchID(
-            reason: "Unlock \(appName)"
+            reason: String(localized: "Unlock \(appName)")
         ) { result in
             guard currentAttempt == attempt else { return } // already timed out
             currentAttempt = nil

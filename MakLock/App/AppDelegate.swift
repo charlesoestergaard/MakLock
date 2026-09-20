@@ -53,7 +53,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Overlay dismissed without authentication — app stays locked
         OverlayWindowService.shared.onAccessDenied = { [weak self] appName in
             self?.menuBarController.iconState = .active
-            Self.sendNotification(title: "Access Denied", body: "Someone tried to open \(appName) without unlocking it")
+            Self.sendNotification(
+                title: String(localized: "Access Denied"),
+                body: String(localized: "Someone tried to open \(appName) without unlocking it")
+            )
         }
 
         // Start Watch proximity BEFORE app monitoring so Watch has time to connect.
@@ -181,12 +184,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     /// Post a local notification when Watch auto-unlocks an app.
     static func sendWatchUnlockNotification(appName: String) {
-        sendNotification(title: "Unlocked", body: "Apple Watch unlocked \(appName)")
+        sendNotification(title: String(localized: "Unlocked"), body: String(localized: "Apple Watch unlocked \(appName)"))
     }
 
     /// Post a local notification when Touch ID or password unlocks an app.
     static func sendUnlockNotification(appName: String) {
-        sendNotification(title: "Unlocked", body: "\(appName) unlocked with Touch ID")
+        sendNotification(title: String(localized: "Unlocked"), body: String(localized: "\(appName) unlocked with Touch ID"))
     }
 
     private static func sendNotification(title: String, body: String) {
