@@ -28,6 +28,22 @@ struct AppsSettingsView: View {
         .padding()
     }
 
+    /// Minutes offered in the stay-unlocked menu (0 = ask every time).
+    private static let stayUnlockedOptions = [0, 5, 15, 30, 60, 120, 240, 480]
+
+    private static func stayUnlockedTitle(_ minutes: Int) -> String {
+        switch minutes {
+        case 0: return String(localized: "Ask every time")
+        case ..<60: return String(localized: "Stay unlocked for \(minutes) minutes")
+        case 60: return String(localized: "Stay unlocked for 1 hour")
+        default: return String(localized: "Stay unlocked for \(minutes / 60) hours")
+        }
+    }
+
+    private static func stayUnlockedShortTitle(_ minutes: Int) -> String {
+        minutes < 60 ? String(localized: "\(minutes) min") : String(localized: "\(minutes / 60) h")
+    }
+
     private var emptyState: some View {
         VStack(spacing: 12) {
             Spacer()
@@ -58,6 +74,34 @@ struct AppsSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                     Spacer()
+
+                    // Stay-unlocked period
+                    Menu {
+                        ForEach(Self.stayUnlockedOptions, id: \.self) { minutes in
+                            Button {
+                                manager.setStayUnlockedMinutes(minutes == 0 ? nil : minutes, for: app)
+                            } label: {
+                                if (app.stayUnlockedMinutes ?? 0) == minutes {
+                                    Label(Self.stayUnlockedTitle(minutes), systemImage: "checkmark")
+                                } else {
+                                    Text(Self.stayUnlockedTitle(minutes))
+                                }
+                            }
+                        }
+                    } label: {
+                        HStack(spacing: 3) {
+                            Image(systemName: "hourglass")
+                            if let minutes = app.stayUnlockedMinutes, minutes > 0 {
+                                Text(Self.stayUnlockedShortTitle(minutes))
+                            }
+                        }
+                        .font(.system(size: 12))
+                        .foregroundColor(app.stayUnlockedMinutes == nil ? MakLockColors.textSecondary : MakLockColors.gold)
+                    }
+                    .menuStyle(.borderlessButton)
+                    .menuIndicator(.hidden)
+                    .fixedSize()
+                    .help("How long the app stays unlocked before asking again")
 
                     // Auto-close toggle
                     Button(action: { manager.toggleAutoClose(app) }) {
